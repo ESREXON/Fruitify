@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Fruitify</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Fruitify 🍇</h1>
+            <p>Your Fresh Fruit Inventory Manager</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#inventory">Inventory</a></li>
+                <li><a href="index.html#login">Login</a></li>
+                <li><a href="cart.html">Cart 🛒</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="cart">
+        <div class="container">
+            <h2>Your Cart</h2>
+            <div id="cart-items" class="cart-grid"></div>
+            
+            <div class="cart-address">
+                <h3>Delivery Address</h3>
+                <input type="text" id="address" placeholder="Enter your address" required>
+            </div>
+            
+            <div class="cart-total">
+                <h3>Total: $<span id="total-price">0.00</span></h3>
+                <button id="checkout-btn" class="btn">Checkout</button>
+            </div>
+            
+            <p id="order-message" style="display: none; font-size: 1.2rem; color: green; margin-top: 20px;"></p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Fruitify. All rights reserved.</p>
+            <p>Contact us: info@fruitify.com</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+            const cartContainer = document.getElementById("cart-items");
+            const totalPriceElement = document.getElementById("total-price");
+            let totalPrice = 0;
+
+            if (cartItems.length === 0) {
+                cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+            } else {
+                cartItems.forEach(item => {
+                    const cartItem = document.createElement("div");
+                    cartItem.classList.add("cart-item");
+                    cartItem.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="cart-img">
+                        <div class="cart-info">
+                            <h4>${item.name}</h4>
+                            <p>Quantity: ${item.quantity}</p>
+                            <p>Price: $${(item.price * item.quantity).toFixed(2)}</p>
+                        </div>
+                    `;
+                    cartContainer.appendChild(cartItem);
+                    totalPrice += item.price * item.quantity;
+                });
+            }
+            totalPriceElement.textContent = totalPrice.toFixed(2);
+        });
+
+        document.getElementById("checkout-btn").addEventListener("click", function() {
+        const address = document.getElementById("address").value.trim();
+        const orderMessage = document.getElementById("order-message");
+        const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+        if (address === "" || cartItems.length === 0) {
+            alert("Please enter your address and add items to the cart before checkout.");
+            return;
+        }
+
+        let orders = JSON.parse(localStorage.getItem("orders")) || [];
+        orders.push({ address, items: cartItems, date: new Date().toLocaleString() });
+        localStorage.setItem("orders", JSON.stringify(orders));
+
+        orderMessage.textContent = "Your order will be delivered shortly.";
+        orderMessage.style.display = "block";
+        localStorage.removeItem("cart");
+        });
+    </script>
+</body>
+</html>

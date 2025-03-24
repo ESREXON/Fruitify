@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Orders - Fruitify</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Fruitify 🍇</h1>
+            <p>Your Fresh Fruit Inventory Manager</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#inventory">Inventory</a></li>
+                <li><a href="index.html#login">Login</a></li>
+                <li><a href="cart.html">Cart 🛒</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="orders">
+        <div class="container">
+            <h2>Your Orders</h2>
+            <div id="order-list"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Fruitify. All rights reserved.</p>
+            <p>Contact us: info@fruitify.com</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const orders = JSON.parse(localStorage.getItem("orders")) || [];
+            const orderList = document.getElementById("order-list");
+
+            if (orders.length === 0) {
+                orderList.innerHTML = "<p>No past orders found.</p>";
+            } else {
+                orders.forEach(order => {
+                    const orderDiv = document.createElement("div");
+                    orderDiv.classList.add("order-item");
+                    orderDiv.innerHTML = `
+                        <h3>Order Date: ${order.date}</h3>
+                        <p><strong>Delivery Address:</strong> ${order.address}</p>
+                        <ul>
+                            ${order.items.map(item => `<li>${item.quantity}x ${item.name} - $${(item.price * item.quantity).toFixed(2)}</li>`).join('')}
+                        </ul>
+                        <hr>
+                    `;
+                    orderList.appendChild(orderDiv);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

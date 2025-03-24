@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Fruitify</title>
+    <style>
+        /* Integrated CSS */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .auth-container {
+            display: flex;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 900px;
+        }
+
+        .auth-left, .auth-right {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .auth-left {
+            background-color: #6a1b9a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .auth-left h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .auth-left p {
+            font-size: 1.2rem;
+        }
+
+        .auth-right h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #6a1b9a;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            background-color: #6a1b9a;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #4a148c;
+        }
+
+        .auth-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .auth-link a {
+            color: #6a1b9a;
+            text-decoration: none;
+        }
+
+        .auth-link a:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1rem;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-left">
+            <h1>Welcome to Fruitify 🍇</h1>
+            <p>Join us to manage your fruit inventory with ease and style.</p>
+        </div>
+        <div class="auth-right">
+            <h2>Create Your Account</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
+                </div>
+                <button type="submit" class="btn">Sign Up</button>
+                <p class="auth-link">Already have an account? <a href="login.html">Login here</a></p>
+            </form>
+            <p id="message" class="message"></p>
+        </div>
+    </div>
+
+    <script>
+        // Signup Form Validation
+        const signupForm = document.getElementById('signup-form');
+        const message = document.getElementById('message');
+
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent form submission
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // Basic validation
+            if (password !== confirmPassword) {
+                message.textContent = "Passwords do not match!";
+                message.style.color = "red";
+            } else {
+                // Store user data in localStorage
+                const user = {
+                    name: name,
+                    email: email,
+                    password: password
+                };
+                localStorage.setItem(email, JSON.stringify(user));
+
+                message.textContent = `Welcome, ${name}! Your account has been created.`;
+                message.style.color = "green";
+                signupForm.reset(); // Clear the form
+
+                // Redirect to login page after 2 seconds
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
